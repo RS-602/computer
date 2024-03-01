@@ -1,64 +1,65 @@
-<!DOCTYPE html> // blackbox.ai
-<html style="height:100%; margin:0; padding:0">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title>Fullscreen Clock</title>
-		<style type="text/css">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Fullscreen Clock</title>
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background: #000000;
+			font-family: sans-serif;
+			font-weight: bold;
+			color: #ffffff;
+		}
 
-			html {
-				background: #000000;
-				font-family: sans-serif;
-				font-weight: bold;
-				color: #ffffff;
-			}
+		.container {
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			align-items: center;
+		}
 
-			body {
-				display: flex;
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				justify-content: center;
-				align-items: center;
-			}
+		.clock {
+			font-size: 100pt;
+			border: 5px solid #000000;
+			padding: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<span class="clock"></span>
+	</div>
 
-			#clocktext {
-				font-size: 100pt;
-				border: 5px solid #000000;
-				padding: 20px;
+	<script>
+		"use strict";
+
+		const textElem = document.querySelector(".clock");
+
+		function updateClock() {
+			const d = new Date();
+			let s = "";
+			s += (d.getHours() < 10 ? "0" : "") + d.getHours() + ":";
+			s += (d.getMinutes() < 10 ? "0" : "") + d.getMinutes() + ":";
+			s += (d.getSeconds() < 10 ? "0" : "") + d.getSeconds();
+			textElem.textContent = s;
+			setTimeout(updateClock, 1000 - d.getTime() % 1000 + 20);
+		}
+
+		function updateTextSize() {
+			const targetWidth = 0.9;
+			let curFontSize = 100;
+			for (let i = 0; i < 3; i++) {
+				curFontSize *= targetWidth / (textElem.offsetWidth / textElem.parentNode.offsetWidth);
+				textElem.style.fontSize = curFontSize + "pt";
 			}
-		</style>
-	</head>
-	
-	<body>
-		<span id="clocktext"></span>
-		
-		<script>
-			"use strict";
-			
-			let textElem = document.getElementById("clocktext");
-			const targetWidth = 0.9;  
-			let curFontSize = 100;  
-			
-			function updateClock() {
-				const d = new Date();
-				let s = "";
-				s += (10 > d.getHours  () ? "0" : "") + d.getHours  () + ":";
-				s += (10 > d.getMinutes() ? "0" : "") + d.getMinutes() + ":";
-				s += (10 > d.getSeconds() ? "0" : "") + d.getSeconds();
-				textElem.textContent = s;
-				setTimeout(updateClock, 1000 - d.getTime() % 1000 + 20);
-			}
-			
-			function updateTextSize() {
-				for (let i = 0; 3 > i; i++) { 
-					curFontSize *= targetWidth / (textElem.offsetWidth / textElem.parentNode.offsetWidth);
-					textElem.style.fontSize = curFontSize + "pt";
-				}
-			}
-			
-			updateClock();
-			updateTextSize();
-			window.addEventListener("resize", updateTextSize);
-		</script>
-	</body>
+		}
+
+		updateClock();
+		updateTextSize();
+		window.addEventListener("resize", updateTextSize);
+	</script>
+</body>
 </html>
